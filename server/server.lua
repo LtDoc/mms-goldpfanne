@@ -53,19 +53,23 @@ AddEventHandler('mms-goldpfanne:server:addreward', function()
 			table.insert(reward,v)
 		end
 	end
-	local chance2 = math.random(1,keysx(reward))
-	local count = math.random(1,reward[chance2].amount)
-	exports.vorp_inventory:canCarryItems(tonumber(_source), count, function(canCarry)
-		exports.vorp_inventory:canCarryItem(tonumber(_source), reward[chance2].name,count, function(canCarry2)
-			if canCarry and canCarry2 then
-				exports.vorp_inventory:addItem(_source, reward[chance2].name, count)
-				VORPcore.NotifyTip(_source, Config.YouFound .." "..reward[chance2].label, 5000)
-			else
-				VORPcore.NotifyTip(_source, Config.InvFull .." "..reward[chance2].label, 5000)
-			end
+	if keysx(reward) > 0 then
+		local chance2 = math.random(1,keysx(reward))
+		local count = math.random(1,reward[chance2].amount)
+		exports.vorp_inventory:canCarryItems(tonumber(_source), count, function(canCarry)
+			exports.vorp_inventory:canCarryItem(tonumber(_source), reward[chance2].name,count, function(canCarry2)
+				if canCarry and canCarry2 then
+					exports.vorp_inventory:addItem(_source, reward[chance2].name, count)
+					VORPcore.NotifyTip(_source, Config.YouFound .." "..reward[chance2].label, 5000)
+				else
+					VORPcore.NotifyTip(_source, Config.InvFull .." "..reward[chance2].label, 5000)
+				end
+			end)
 		end)
-	end) 
+	else
+	end
 end)
+
 
 
 
